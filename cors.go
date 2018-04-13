@@ -207,6 +207,9 @@ func (c *Cors) HandlerFunc(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodOptions && r.Header.Get("Access-Control-Request-Method") != "" {
 		c.logf("HandlerFunc: Preflight request")
 		c.handlePreflight(w, r)
+		if !c.optionPassthrough {
+			w.WriteHeader(http.StatusOK)
+		}
 	} else {
 		c.logf("HandlerFunc: Actual request")
 		c.handleActualRequest(w, r)
